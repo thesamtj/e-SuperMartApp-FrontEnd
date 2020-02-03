@@ -52,24 +52,7 @@
                             </mat-form-field>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <mat-form-field class="full-width"> 
-                                    <input 
-                                    name="password" 
-                                    formControlName="repeatPassword" 
-                                    matInput 
-                                    placeholder="Repeat Password" 
-                                    type="password"
-                                    required
-                                    />
-                            </mat-form-field>
-                            <mat-error *ngIf="repeatPassword.invalid &&
-                            repeatPassword.errors.passwordMatch">
-                                Password should match
-                            </mat-error>
-                        </td>
-                    </tr>
+                    
                 </table>
           </form>
         </mat-card-content>
@@ -84,7 +67,7 @@
             <div style="margin-top: 2em;">
                 <span class="leftspacer">Already have an account? 
                     <a 
-                    [routerLink]="['/auth']">
+                    [routerLink]="['/login']">
                     Login</a> here.
                 </span>
             </div>
