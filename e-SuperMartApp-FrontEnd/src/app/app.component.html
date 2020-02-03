@@ -8,9 +8,24 @@
             <a mat-button routerLink="/products" routerLinkActive="active-link">
                 Products
             </a>
-            <a mat-button routerLink="/login" routerLinkActive="active-link">
+            <a *ngIf="!user" mat-button routerLink="/login" routerLinkActive="active-link">
                 Login
             </a>
+            <div>
+                <a 
+                    [matMenuTriggerFor]="menu"
+                    *ngIf="user"
+                    mat-button 
+                    ><mat-icon>account_circle</mat-icon>
+                    
+                </a>
+                <mat-menu #menu="matMenu">
+                    <button 
+                        (click)="logout()" 
+                        mat-menu-item>logout
+                    </button>
+                </mat-menu>
+            </div>
         </mat-toolbar-row>
     </mat-tool>
 </header>
