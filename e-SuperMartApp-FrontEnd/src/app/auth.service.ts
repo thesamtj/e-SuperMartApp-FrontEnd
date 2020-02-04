@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { User } from './User';
 
@@ -9,7 +10,9 @@ import { User } from './User';
 export class AuthService {
    
    private user$: Subject<User>();
-   constructor() { }
+   private apiUrl = '/api/auth/'
+
+   constructor(private httpClient: HttpClient) { }
 
   login(email: string, password: string) {
     const loginCredentials = { email, password };
@@ -27,9 +30,17 @@ export class AuthService {
   }
 
   register(user: any) {
-    this.setUser(user);
-    console.log('registered user successfully', user);
-    return of(user);
+    return this.httpClient.post<User>(`${this.apiUrl}register`, user).pipe(
+        switchMap(savedUser => {
+          this.setUser(savedUser);
+          console.log(`user registered successfully`, user);
+          return of(savedUse);
+        }),
+        catchError(e=> {
+          console.log('server error occured', e)
+          return throwError('Registration failed please conact admin')
+        })
+      );
   }
 
   private setUser(user) {
