@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
-import { User } from './User';
+import { User } from './user';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +14,19 @@ export class AuthService {
 
    constructor(private httpClient: HttpClient) { }
 
-  login(email: string, password: string) {
+   login(email: string, password: string) {
     const loginCredentials = { email, password };
-    console.log('logincredentials', loginCredentials);
-    return of(loginCredentials);
-  }
+    return this.httpClient.post<User>(`${this.apiUrl}login`, loginCredentials).pipe(
+      switchMap(foundUser => {
+        this.setUser(foundUser);
+        console.log('user found', foundUser);
+        return of(foundUser);
+      }),
+      catchError(e=> {
+        return throwError('Login could not be verified. Please try again.');
+      })
+    );
+  } 
 
   logout() {
     this.setUser(null);
