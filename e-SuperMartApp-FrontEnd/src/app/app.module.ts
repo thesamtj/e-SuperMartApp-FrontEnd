@@ -9,14 +9,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthHeaderInterceptorService } from './interceptors/auth-header-interceptor.service';
 import { SharedModule } from '@shared/shared.module';
+import { BlocksModule } from './blocks/blocks.module';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent],
+  declarations: [HomeComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    SharedModule
+    BlocksModule,
+    SharedModule,
     HttpClientModule
   ],
   providers: [{
