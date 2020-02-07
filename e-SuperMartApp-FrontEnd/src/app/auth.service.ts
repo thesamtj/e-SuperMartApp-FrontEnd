@@ -4,6 +4,7 @@ import { of, Subject, throwError, EMPTY } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
 import { User } from './user';
 import { TokenStorageService } from './token.storage.service';
+import { LogService } from './log.service';
 
 interface UserDto {
     user: User;
@@ -20,7 +21,8 @@ export class AuthService {
    private apiUrl = '/api/auth/'
 
    constructor(private httpClient: HttpClient, 
-    private tokenStorage: TokenStorageService) { }
+    private tokenStorage: TokenStorageService,
+    private logService: LogService) { }
 
     login(email: string, password: string) {
         const loginCredentials = { email, password };
