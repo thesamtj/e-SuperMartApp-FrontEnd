@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { User } from './user';
+import { TokenStorageService } from './token.storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class AuthService {
    private user$: Subject<User>();
    private apiUrl = '/api/auth/'
 
-   constructor(private httpClient: HttpClient) { }
+   constructor(private httpClient: HttpClient, 
+    private tokenStorage: TokenStorageService) { }
 
    login(email: string, password: string) {
     const loginCredentials = { email, password };
@@ -37,18 +39,19 @@ export class AuthService {
     this.user$.asObservable();
   }
 
-  register(user: any) {
-    return this.httpClient.post<User>(`${this.apiUrl}register`, user).pipe(
-        switchMap(savedUser => {
-          this.setUser(savedUser);
-          console.log(`user registered successfully`, user);
-          return of(savedUse);
-        }),
-        catchError(e=> {
-          console.log('server error occured', e)
-          return throwError('Registration failed please conact admin')
-        })
-      );
+  register(userToSave: any) {
+    return this.httpClient.post<any>(`${this.apiUrl}register`, userToSave).pipe(
+      switchMap(({ user, token }) => {
+        this.setUser(user);
+        this.tokenStorage.setToken(token);
+        console.log(`user registered successfully`, user);
+        return of(user);
+      }),
+      catchError(e=> {
+        console.log('server error occured', e)
+        return throwError('Registration failed please conact admin')
+      })
+    );
   }
 
   private setUser(user) {
